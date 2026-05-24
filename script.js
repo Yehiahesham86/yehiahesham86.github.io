@@ -3892,11 +3892,22 @@ function switchPage(pageId) {
   qsa('.stage-tab').forEach(tab =>
     tab.classList.toggle('active', tab.dataset.page === pageId)
   );
-  // Analytics: virtual page view
+  // Update URL hash so GA4 sees distinct pages
+  const hash = pageId === 'home' ? '' : '#' + pageId;
+  history.pushState({ pageId }, '', location.pathname + location.search + hash);
+
+  // Analytics: virtual page view (GA4 recommended SPA pattern)
   const stage = STAGES.find(s => s.pageId === pageId);
   const pageTitle = pageId === 'home' ? 'Home'
     : stage ? (ar() ? stage.key_ar : zh() ? stage.key_zh : stage.key) : pageId;
-  track('page_view', { page_title: pageTitle, page_path: '/' + pageId, page_location: location.href });
+  const pagePath = pageId === 'home' ? '/' : '/' + pageId;
+  if (typeof gtag === 'function') {
+    gtag('config', 'G-94LX4JF4L3', {
+      page_title: pageTitle,
+      page_path: pagePath,
+      page_location: location.origin + pagePath
+    });
+  }
   if (stage) track('stage_navigate', { stage_id: pageId, stage_name: pageTitle, stage_num: stage.num });
 }
 
@@ -4014,11 +4025,23 @@ function setupScrollTracking() {
       const drop = btn.nextElementSibling;
       btn.classList.toggle('active', !!(drop && drop.querySelector('.tn-item.active')));
     });
-    // Track first-time section view
+    // Track first-time section view + update URL sub-path
     if (id && id !== 'home' && !viewedSections.has(id)) {
       viewedSections.add(id);
       const cat = CATS.find(c => c.id === id);
-      if (cat) track('section_view', { section_id: id, section_name: catTitle(cat), section_group: catGroup(cat) });
+      if (cat) {
+        const sectionPath = '/' + (sectionPageMap[id] || activePage) + '/' + id;
+        const sectionTitle = catTitle(cat) + ' — ' + catGroup(cat);
+        history.replaceState({ pageId: activePage, sectionId: id }, '', location.pathname + location.search + '#' + activePage + '/' + id);
+        if (typeof gtag === 'function') {
+          gtag('config', 'G-94LX4JF4L3', {
+            page_title: sectionTitle,
+            page_path: sectionPath,
+            page_location: location.origin + sectionPath
+          });
+        }
+        track('section_view', { section_id: id, section_name: catTitle(cat), section_group: catGroup(cat) });
+      }
     }
   };
   let ticking = false;
@@ -4290,3 +4313,16 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// Handle browser back/forward navigation
+window.addEventListener('popstate', e => {
+  const state = e.state;
+  if (state?.pageId) {
+    activePage = state.pageId;
+    qsa('.page-view').forEach(p => p.classList.toggle('active', p.id === state.pageId));
+    qsa('.tn-trigger[data-page]').forEach(btn => btn.classList.toggle('active', btn.dataset.page === state.pageId));
+    qs('.sb-home')?.classList.toggle('active', state.pageId === 'home');
+    qsa('.stage-tab').forEach(tab => tab.classList.toggle('active', tab.dataset.page === state.pageId));
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+});
