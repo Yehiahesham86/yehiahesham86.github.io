@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TMK Service Evaluation — Knowledge Book</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Cairo:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap');
+
+  :root{
+    --ink:#16211F;
+    --ink-soft:#3E4B47;
+    --paper:#EEF1EF;
+    --panel:#FFFFFF;
+    --line:#D9DFDC;
+    --brand:#0B5E56;
+    --brand-dark:#073F3A;
+    --gold:#B8862E;
+    --satisfied:#2F7D4F;
+    --satisfied-bg:#E7F3EB;
+    --fallback:#B8862E;
+    --fallback-bg:#FBF1DE;
+    --issue:#A6423B;
+    --issue-bg:#F8E9E7;
+    --mono: 'IBM Plex Mono', monospace;
+    --serif: 'Fraunces', serif;
+    --sans: 'Inter', sans-serif;
+    --arserif: 'Amiri', serif;
+    --arsans: 'Cairo', sans-serif;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.55;
+  }
+  a{ color:inherit; }
+
+  /* ---------- RTL mode ---------- */
+  body.rtl{ font-family:var(--arsans); }
+  body.rtl .book-title,
+  body.rtl .sidebar-title,
+  body.rtl h2.section-title,
+  body.rtl .script-line{ font-family:var(--arserif); }
+  body.rtl .shell{ direction:rtl; }
+  body.rtl .sidebar{ order:2; }
+  body.rtl .main{ order:1; }
+  body.rtl .nav-link{ border-left:none; border-right:2px solid transparent; }
+  body.rtl .nav-link.active{ border-right-color:var(--gold); }
+  body.rtl .script-line{ border-left:none; border-right:3px solid var(--brand); padding-left:0; padding-right:16px; }
+  body.rtl .flow-row{ direction:rtl; }
+  body.rtl .bubble{ flex-direction:row-reverse; }
+  body.rtl table.faq th, body.rtl table.faq td{ text-align:right; }
+  body.rtl .checklist li::before{ order:2; }
+  body.rtl .checklist li{ flex-direction:row-reverse; justify-content:flex-end; }
+  body.rtl .eyebrow, body.rtl .section-number, body.rtl .flowmap-title,
+  body.rtl .who-name, body.rtl .example-header .ex-title, body.rtl .note b{ font-family:var(--mono); direction:ltr; unicode-bidi:embed; }
+  body.rtl .search-wrap input::placeholder{ font-family:var(--arsans); }
+
+  /* ---------- Layout shell ---------- */
+  .shell{ display:flex; min-height:100vh; }
+
+  .sidebar{
+    width:272px;
+    flex-shrink:0;
+    background:var(--brand-dark);
+    color:#EAF3F0;
+    padding:28px 20px 28px;
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+  }
+  .sidebar-brand{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#9FC9C0;
+    margin-bottom:4px;
+  }
+  .sidebar-title{
+    font-family:var(--serif);
+    font-size:22px;
+    font-weight:600;
+    line-height:1.25;
+    margin:0 0 22px;
+    color:#fff;
+  }
+  .nav-group{ margin-bottom:6px; }
+  .nav-label{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#7FA79E;
+    margin:18px 0 8px;
+  }
+  .nav-link{
+    display:block;
+    padding:7px 10px;
+    border-radius:6px;
+    font-size:13.5px;
+    color:#D7E7E3;
+    text-decoration:none;
+    margin-bottom:2px;
+    border-left:2px solid transparent;
+  }
+  .nav-link:hover{ background:rgba(255,255,255,.06); color:#fff; }
+  .nav-link.active{ background:rgba(255,255,255,.09); border-left-color:var(--gold); color:#fff; }
+
+  .main{ flex:1; min-width:0; }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:5;
+    background:rgba(238,241,239,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+    padding:14px 40px;
+    display:flex; align-items:center; gap:16px;
+  }
+  .search-wrap{
+    flex:1; max-width:420px;
+    display:flex; align-items:center;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:8px 12px;
+    gap:8px;
+  }
+  .search-wrap input{
+    border:none; outline:none; background:transparent;
+    font-family:var(--sans); font-size:13.5px; width:100%; color:var(--ink);
+  }
+  .kbd{
+    font-family:var(--mono); font-size:11px; color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:4px; padding:1px 6px;
+    background:var(--paper);
+  }
+  .topbar-meta{
+    margin-left:auto; font-family:var(--mono); font-size:11px;
+    color:var(--ink-soft); letter-spacing:.05em; text-transform:uppercase;
+  }
+  .lang-toggle{
+    font-family:var(--mono); font-size:12px; font-weight:600;
+    border:1px solid var(--brand); color:var(--brand); background:#fff;
+    border-radius:8px; padding:8px 14px; cursor:pointer; letter-spacing:.03em;
+    display:flex; align-items:center; gap:6px; flex-shrink:0;
+  }
+  .lang-toggle:hover{ background:var(--brand); color:#fff; }
+  body.rtl .topbar-meta{ margin-left:0; margin-right:auto; }
+
+  .content{ max-width:840px; margin:0 auto; padding:48px 40px 120px; }
+
+  /* ---------- Hero / flow map ---------- */
+  .hero{ margin-bottom:56px; }
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--brand); margin-bottom:10px;
+  }
+  h1.book-title{
+    font-family:var(--serif); font-size:40px; font-weight:700;
+    line-height:1.12; margin:0 0 14px; letter-spacing:-.01em;
+  }
+  .hero p.lead{ font-size:16px; color:var(--ink-soft); max-width:62ch; margin:0 0 32px; }
+
+  .flowmap{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:26px 28px; overflow-x:auto;
+  }
+  .flowmap-title{ font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft); margin-bottom:16px; }
+  .flow-row{ display:flex; align-items:center; gap:6px; min-width:720px; }
+  .flow-node{
+    font-family:var(--sans); font-size:12.5px; font-weight:600;
+    padding:10px 14px; border-radius:8px; white-space:nowrap;
+    border:1px solid var(--line); background:var(--paper); color:var(--ink);
+  }
+  body.rtl .flow-node{ font-family:var(--arsans); }
+  .flow-node.start{ background:var(--brand); color:#fff; border-color:var(--brand); }
+  .flow-arrow{ color:var(--ink-soft); font-size:15px; flex-shrink:0; }
+  .flow-branches{ display:flex; flex-direction:column; gap:10px; margin-left:6px; }
+  body.rtl .flow-branches{ margin-left:0; margin-right:6px; }
+  .flow-node.satisfied{ background:var(--satisfied-bg); border-color:var(--satisfied); color:var(--satisfied); }
+  .flow-node.fallback{ background:var(--fallback-bg); border-color:var(--fallback); color:var(--fallback); }
+  .flow-node.issue{ background:var(--issue-bg); border-color:var(--issue); color:var(--issue); }
+
+  /* ---------- Sections ---------- */
+  section.kb-section{ margin-bottom:64px; scroll-margin-top:90px; }
+  .section-number{ font-family:var(--mono); font-size:12px; color:var(--brand); letter-spacing:.08em; }
+  h2.section-title{
+    font-family:var(--serif); font-size:27px; font-weight:600; margin:6px 0 14px;
+  }
+  body.rtl h2.section-title{ font-family:var(--arserif); }
+  p.section-purpose{ color:var(--ink-soft); margin:0 0 26px; max-width:64ch; }
+
+  .tag{
+    display:inline-block; font-family:var(--mono); font-size:10.5px; font-weight:600;
+    letter-spacing:.08em; text-transform:uppercase; padding:3px 9px; border-radius:5px;
+    margin-bottom:14px;
+  }
+  body.rtl .tag{ font-family:var(--arsans); letter-spacing:0; text-transform:none; }
+  .tag.satisfied{ background:var(--satisfied-bg); color:var(--satisfied); }
+  .tag.fallback{ background:var(--fallback-bg); color:var(--fallback); }
+  .tag.issue{ background:var(--issue-bg); color:var(--issue); }
+  .tag.neutral{ background:#E7E9F2; color:#3B4270; }
+
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:22px 24px; margin-bottom:20px;
+  }
+  .card h3{ font-size:14px; margin:0 0 12px; font-weight:700; }
+  .script-line{
+    font-family:var(--serif); font-style:italic; font-size:16px; line-height:1.6;
+    color:var(--ink); border-left:3px solid var(--brand); padding-left:16px; margin:0 0 14px;
+  }
+  body.rtl .script-line{ font-style:normal; }
+  .who{ font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); display:block; margin-bottom:4px; }
+
+  .note{
+    font-size:12.5px; color:var(--ink-soft); background:#E9EEEC; border-radius:8px;
+    padding:10px 14px; margin-top:6px;
+  }
+  .note b{ color:var(--brand-dark); }
+
+  /* ---------- Example call transcript ---------- */
+  .example{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:6px 0 20px; margin-top:6px;
+  }
+  .example-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 22px 12px; border-bottom:1px solid var(--line);
+  }
+  .example-header .ex-title{ font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); }
+  body.rtl .example-header .ex-title{ text-transform:none; }
+  .transcript{ padding:16px 22px 0; }
+  .bubble{ display:flex; gap:10px; margin-bottom:14px; align-items:flex-start; }
+  .bubble .avatar{
+    width:26px; height:26px; border-radius:50%; flex-shrink:0;
+    font-family:var(--mono); font-size:10px; font-weight:700; color:#fff;
+    display:flex; align-items:center; justify-content:center; margin-top:2px;
+  }
+  .bubble.agent .avatar{ background:var(--brand); }
+  .bubble.parent .avatar{ background:#7A6E5D; }
+  .bubble .msg{ font-size:14px; max-width:60ch; }
+  .bubble .who-name{ font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); display:block; margin-bottom:2px; }
+  body.rtl .bubble .who-name{ text-transform:none; }
+  .bubble .msg-text{ display:block; }
+
+  table.faq{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  table.faq th{
+    text-align:left; font-family:var(--mono); font-size:10.5px; text-transform:uppercase;
+    letter-spacing:.06em; color:#fff; background:var(--brand-dark); padding:9px 12px;
+  }
+  body.rtl table.faq th{ font-family:var(--arsans); text-transform:none; }
+  table.faq td{ padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  table.faq tr:nth-child(even) td{ background:#F5F7F6; }
+
+  .checklist{ list-style:none; padding:0; margin:0; }
+  .checklist li{
+    display:flex; gap:10px; align-items:flex-start; padding:8px 0;
+    border-bottom:1px dashed var(--line); font-size:13.5px;
+  }
+  .checklist li::before{ content:"☐"; color:var(--brand); font-size:15px; line-height:1; }
+
+  footer.kb-footer{
+    max-width:840px; margin:0 auto; padding:0 40px 60px; color:var(--ink-soft); font-size:12.5px;
+  }
+
+  .hidden-by-search{ display:none !important; }
+
+  @media (max-width: 880px){
+    .sidebar{ display:none; }
+    .content{ padding:32px 20px 100px; }
+    .topbar{ padding:12px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand" data-ar="51Talk · قاعدة معرفة الإحالة">51Talk · Referral KB</div>
+    <div class="sidebar-title" data-ar="مسار تقييم الخدمة – TMK">TMK Service Evaluation Track</div>
+
+    <div class="nav-group">
+      <a class="nav-link" href="#opening" data-ar="١. الافتتاحية وتقييم الخدمة">1. Opening &amp; Evaluation</a>
+      <a class="nav-link" href="#assessment" data-ar="٢. أسئلة قياس الرضا">2. Satisfaction Probes</a>
+    </div>
+    <div class="nav-label" data-ar="المسار أ — العميل راضٍ">Branch A — Satisfied</div>
+    <div class="nav-group">
+      <a class="nav-link" href="#branch-a" data-ar="٣. تفعيل الإحالة">3. Referral Trigger</a>
+      <a class="nav-link" href="#branch-a2" data-ar="٤. بديل: تسجيل حضور أو مشاركة">4. Check-in / Share Fallback</a>
+    </div>
+    <div class="nav-label" data-ar="المسار ب — العميل غير راضٍ">Branch B — Dissatisfied</div>
+    <div class="nav-group">
+      <a class="nav-link" href="#branch-b" data-ar="٥. حل المشكلات">5. Issue Resolution</a>
+      <a class="nav-link" href="#escalation" data-ar="٥.٧ التصعيد">5.7 Escalation</a>
+    </div>
+    <div class="nav-label" data-ar="مرجع سريع">Reference</div>
+    <div class="nav-group">
+      <a class="nav-link" href="#objections" data-ar="٦. الاعتراضات والأسئلة الشائعة">6. Objections &amp; FAQ</a>
+      <a class="nav-link" href="#closing" data-ar="٧. نصوص الختام">7. Closing Scripts</a>
+      <a class="nav-link" href="#ux-survey" data-ar="٨. إضافات استبيان تجربة المستخدم">8. UX Survey Add-ons</a>
+      <a class="nav-link" href="#logging" data-ar="٩. تسجيل بيانات المكالمة">9. Call Logging</a>
+      <a class="nav-link" href="#quickref" data-ar="١٠. البطاقة المرجعية السريعة">10. Quick Reference</a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="search-wrap">
+        <span>⌕</span>
+        <input id="kbSearch" type="text" placeholder="Search scripts, examples, objections…" data-ph-ar="ابحث في النصوص والأمثلة والاعتراضات…">
+        <span class="kbd">⌘K</span>
+      </div>
+      <button class="lang-toggle" id="langToggle" data-ar="English" data-en="العربية">
+        <span id="langToggleLabel">العربية</span>
+      </button>
+      <div class="topbar-meta" data-ar="المرحلة ١ · نموذج أولي">Phase 1 · MVP</div>
+    </div>
+
+    <div class="content" id="kbContent">
+
+      <div class="hero">
+        <div class="eyebrow" data-ar="مشروع الإحالة في الشرق الأوسط — تقييم الخدمة">Middle East Referral Project — Service Evaluation</div>
+        <h1 class="book-title" data-ar="كل مكالمة تبعد عنك صفحة واحدة فقط.">Every call, one page away.</h1>
+        <p class="lead" data-ar="هذه مكتبة النصوص العملية لفريق تقييم الخدمة TMK — نفس النصوص، مرتّبة وفق منطق التفرّع الذي تسير عليه كل مكالمة فعليًا، مع مثال تطبيقي أسفل كل نص.">This is the working script library for the TMK Service Evaluation team — the same scripts, translated into the branching logic every call actually follows, with a worked example under each one.</p>
+
+        <div class="flowmap">
+          <div class="flowmap-title" data-ar="كيف تسير المكالمة">How a call moves</div>
+          <div class="flow-row">
+            <div class="flow-node start" data-ar="بدء المكالمة">Opening call</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-node" data-ar="فحص الرضا">Satisfaction check</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-branches">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div class="flow-node satisfied" data-ar="راضٍ">Satisfied</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-node satisfied" data-ar="طلب الإحالة">Referral ask</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-node fallback" data-ar="أو تسجيل حضور / مشاركة">or check-in / share</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div class="flow-node issue" data-ar="غير راضٍ">Dissatisfied</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-node issue" data-ar="الحل ضمن الصلاحيات">Resolve within permissions</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-node issue" data-ar="أو التصعيد">or escalate</div>
+              </div>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-node" data-ar="التسجيل والختام">Log &amp; close</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. OPENING -->
+      <section class="kb-section" id="opening">
+        <div class="section-number">01</div>
+        <h2 class="section-title" data-ar="الافتتاحية وتقييم الخدمة">Opening &amp; Service Evaluation</h2>
+        <p class="section-purpose" data-ar="تأكيد الهوية، وخلق أجواء غير ضاغطة، ثم الانتقال إلى فحص الرضا. لا يُذكر أي شيء عن الإحالة أو الأمثلة هنا — فمكالمات التقييم غير المتوقعة مألوفة وموثوقة في السوق السعودي (تُجريها كل من STC وزين)، لذا ابدأ بهذه الألفة بدلاً من عرض مباشر.">Confirm identity, set a low-pressure tone, and move into the satisfaction check. Referral and examples are never mentioned here — in Saudi, an unprompted evaluation call is a familiar, trusted format (STC and Zain both call customers this way), so lead with that familiarity, not with a pitch.</p>
+
+        <div class="card">
+          <h3 data-ar="جملة الافتتاح">Opening line</h3>
+          <p class="script-line" data-ar="مرحبًا، معك رانيا، أخصائية تقييم خدمة في 51Talk. هل أتحدث مع أم فيصل، والدة فيصل؟ أتصل بك اليوم فقط للاطمئنان على تجربة تعلّم ابنك مؤخرًا — الأمر لن يستغرق أكثر من دقيقتين.">Hello, this is Rania, a Service Evaluation Specialist at 51Talk. Am I speaking with Umm Faisal, parent of Faisal? I'm calling today simply to check in on your child's recent learning experience — it will only take a couple of minutes.</p>
+          <h3 data-ar="إذا بدا على ولي الأمر الاستعجال">If the parent seems rushed</h3>
+          <p class="script-line" data-ar="أتفهّم انشغالك — هذه ليست مكالمة بيع، بل تقييم قصير نجريه للعائلات النشطة. لدي فقط ثلاثة أسئلة سريعة ثم أترك لك وقتك.">I understand you're busy — this isn't a sales call, it's a short service check we do for active families. I just have three quick questions and then I'll let you go.</p>
+        </div>
+
+        <div class="example">
+          <div class="example-header"><span class="ex-title" data-ar="مثال مكالمة — افتتاحية اعتيادية">Example call — routine opening</span><span class="tag neutral" data-ar="مسجّلة ٠٤:١٢">Recorded 04:12</span></div>
+          <div class="transcript">
+            <div class="bubble agent"><div class="avatar">R</div><div class="msg"><span class="who-name" data-ar="رانيا · الموظفة">Rania · Agent</span><span class="msg-text" data-ar="مرحبًا، معك رانيا من فريق تقييم الخدمة في 51Talk — هل أتحدث مع أم فيصل؟">Hello, this is Rania from 51Talk's Service Evaluation team — am I speaking with Umm Faisal?</span></div></div>
+            <div class="bubble parent"><div class="avatar">U</div><div class="msg"><span class="who-name" data-ar="أم فيصل · ولية الأمر">Umm Faisal · Parent</span><span class="msg-text" data-ar="نعم، أنا أتحدث. هل كل شيء بخير؟">Yes, speaking. Is everything okay?</span></div></div>
+            <div class="bubble agent"><div class="avatar">R</div><div class="msg"><span class="who-name" data-ar="رانيا · الموظفة">Rania · Agent</span><span class="msg-text" data-ar="كل شيء بخير — أتصل فقط للاطمئنان على تجربة فيصل الدراسية مؤخرًا، مثل مكالمات الخدمة التي قد تصلك من STC. هل لديك دقيقتان؟">Everything's fine — I'm just calling to check how Faisal's classes have been going lately, similar to the service calls you might get from STC. Do you have two minutes?</span></div></div>
+            <div class="bubble parent"><div class="avatar">U</div><div class="msg"><span class="who-name" data-ar="أم فيصل · ولية الأمر">Umm Faisal · Parent</span><span class="msg-text" data-ar="آه، حسنًا — تفضلي.">Ah, okay — yes, go ahead.</span></div></div>
+          </div>
+        </div>
+        <p class="note"><b data-ar="ملاحظة تدريبية:">Coaching note:</b> <span data-ar="الإشارة إلى مرجع محلي مألوف (مكالمات STC أو زين) هي ما يجعل النبرة مقبولة خلال أول عشر ثوانٍ.">naming a familiar local reference point (STC/Zain-style service calls) is what gets the tone accepted in the first 10 seconds.</span></p>
+      </section>
+
+      <!-- 2. ASSESSMENT -->
+      <section class="kb-section" id="assessment">
+        <div class="section-number">02</div>
+        <h2 class="section-title" data-ar="أسئلة قياس الرضا">Satisfaction Assessment Probes</h2>
+        <p class="section-purpose" data-ar="خمسة محاور تُبنى عليها مخرجات المكالمة القياسية: مستوى الرضا، أبرز الملاحظات، وجود مشكلة من عدمه، مدى ملاءمة تفعيل الإحالة، والحاجة إلى متابعة. السؤال الأخير هو نقطة التفرّع.">Five dimensions build the standard call output: satisfaction level, main feedback, whether there's an issue, whether referral is appropriate, and whether follow-up is needed. The last question is the branch point.</p>
+        <table class="faq">
+          <tr><th data-ar="المحور">Dimension</th><th data-ar="السؤال">Probe</th><th data-ar="ما الذي نبحث عنه">Listening for</th></tr>
+          <tr><td data-ar="الحضور">Attendance</td><td data-ar="كيف كان انتظام الحضور مؤخرًا؟">How consistent has attendance been recently?</td><td data-ar="غياب متكرر، تعارض في المواعيد">Frequent absences, scheduling conflicts</td></tr>
+          <tr><td data-ar="المعلم">Teacher</td><td data-ar="كيف يشعر طفلك تجاه المعلم الحالي؟">How does your child feel about the current teacher?</td><td data-ar="الانسجام، طلبات التغيير">Rapport, requests to switch</td></tr>
+          <tr><td data-ar="الجدول">Schedule</td><td data-ar="هل الجدول والمستوى الحاليان لا يزالان مناسبين؟">Does the current schedule and level still work well?</td><td data-ar="إرهاق، عدم توافق">Overload, mismatch</td></tr>
+          <tr><td data-ar="الاستجابة">Responsiveness</td><td data-ar="عندما تواصلتم معنا سابقًا، كيف كانت الاستجابة؟">When you've reached out before, how was the response?</td><td data-ar="تذاكر سابقة غير محلولة">Unresolved past tickets</td></tr>
+          <tr><td data-ar="التقييم العام">Overall</td><td data-ar="بشكل عام، كيف تصف التجربة — راضٍ جدًا، راضٍ، أم غير راضٍ؟">Overall, how would you describe the experience — very satisfied, satisfied, or not satisfied?</td><td data-ar="إشارة التفرّع المباشرة">Direct branch signal</td></tr>
+        </table>
+        <p class="note"><b data-ar="نقطة التفرّع:">Branch point:</b> <span data-ar="إجابة إيجابية واضحة ← القسم ٣. أي تردد أو شكوى ← القسم ٥.">a clearly positive answer → Section 3. Any hesitation or complaint → Section 5.</span></p>
+      </section>
+
+      <!-- 3. BRANCH A -->
+      <section class="kb-section" id="branch-a">
+        <div class="section-number">03</div>
+        <span class="tag satisfied" data-ar="المسار أ · راضٍ">Branch A · Satisfied</span>
+        <h2 class="section-title" data-ar="نص تفعيل الإحالة">Referral Trigger Script</h2>
+        <p class="section-purpose" data-ar="لا يُدخل هذا المسار إلا بعد تأكيد الرضا بوضوح وعدم وجود مشكلة عالقة. التسلسل: تأكيد التجربة ← الرضا ← تعزيز قيمة التعلّم ← طلب إحالة طبيعي ← تسجيل المثال ← تأكيد المكافأة.">Enter only once satisfaction is clearly confirmed and there is no open issue. Sequence: experience confirmation → satisfaction → learning-value reinforcement → natural referral ask → example capture → reward confirmation.</p>
+
+        <div class="card">
+          <h3 data-ar="تعزيز قيمة التعلّم + الطلب">Learning-value reinforcement + ask</h3>
+          <p class="script-line" data-ar="يسعدني جدًا أن أسمع أن فيصل يمر بتجربة جيدة. آراء مثل رأيك، المبنية على استخدام حقيقي يوميًا، تساعد فعلاً أولياء أمور آخرين على اتخاذ القرار. هل لديك أصدقاء أو أقارب كانوا يفكرون أيضًا في دروس اللغة الإنجليزية لأطفالهم؟">I'm really glad to hear Faisal has been having a good experience. Feedback like yours, based on real day-to-day use, genuinely helps other parents decide whether to try us. Do you have any friends or family members who've also been thinking about English lessons for their child?</p>
+          <h3 data-ar="إذا ذُكر اسم">If a name is given</h3>
+          <p class="script-line" data-ar="رائع — هل يمكنني أخذ اسمه ورقم هاتفه؟ سيتواصل فريقنا معه شخصيًا، ويذكر أنك من رشّحته، وسنؤكد مكافأتك بمجرد تسجيله، وفق شروط الإحالة الحالية.">That's great — could I take their name and number? Our team will reach out personally, mention that you recommended them, and confirm your reward once they register, per the current referral terms.</p>
+        </div>
+
+        <div class="example">
+          <div class="example-header"><span class="ex-title" data-ar="مثال مكالمة — تم تسجيل إحالة">Example call — referral captured</span><span class="tag satisfied" data-ar="النتيجة: تم تسجيل إحالة">Outcome: Referral logged</span></div>
+          <div class="transcript">
+            <div class="bubble agent"><div class="avatar">R</div><div class="msg"><span class="who-name" data-ar="رانيا · الموظفة">Rania · Agent</span><span class="msg-text" data-ar="يبدو أن الأمور تسير بشكل جيد جدًا مع فيصل — يسعدني سماع ذلك. آراء مثل رأيك تساعد أولياء أمور آخرين كثيرًا. هل هناك أحد في عائلتك أو من أصدقائك كان يفكر في دروس اللغة الإنجليزية؟">It sounds like things have been going really well for Faisal — I'm glad to hear that. Feedback like yours actually helps other parents a lot. Is there anyone in your family or among friends who's been considering English lessons?</span></div></div>
+            <div class="bubble parent"><div class="avatar">U</div><div class="msg"><span class="who-name" data-ar="أم فيصل · ولية الأمر">Umm Faisal · Parent</span><span class="msg-text" data-ar="في الحقيقة نعم — أختي كانت تسألني عن هذا الأسبوع الماضي.">Actually yes — my sister was just asking me about this last week.</span></div></div>
+            <div class="bubble agent"><div class="avatar">R</div><div class="msg"><span class="who-name" data-ar="رانيا · الموظفة">Rania · Agent</span><span class="msg-text" data-ar="رائع — هل يمكنني أخذ اسمها ورقم هاتفها؟ سيتواصل فريقنا معها، ويذكر أن الترشيح منك، وسأتأكد من تفعيل مكافأتك بمجرد تسجيلها.">Wonderful — could I take her name and number? Our team will reach out, mention it's from you, and I'll make sure your referral reward is confirmed once she registers.</span></div></div>
+            <div class="bubble parent"><div class="avatar">U</div><div class="msg"><span class="who-name" data-ar="أم فيصل · ولية الأمر">Umm Faisal · Parent</span><span class="msg-text" data-ar="بالتأكيد، اسمها عائشة، ٠٥X-XXX-XXXX.">Sure, it's Aisha, 05X-XXX-XXXX.</span></div></div>
+            <div class="bubble agent"><div class="avatar">R</div><div class="msg"><span class="who-name" data-ar="رانيا · الموظفة">Rania · Agent</span><span class="msg-text" data-ar="شكرًا جزيلًا — سجّلت عائشة كإحالة منك، وسيتواصل فريقنا خلال ثلاثة أيام.">Thank you so much — I've noted Aisha as your referral, and our team will follow up within three days.</span></div></div>
+          </div>
+        </div>
+        <p class="note"><b data-ar="لا تفعل أبدًا:">Never</b> <span data-ar="اذكر رقمًا محددًا للمكافأة دون التأكد من شروط الإحالة السارية حاليًا.">quote a specific reward figure without confirming the referral terms currently in effect.</span></p>
+      </section>
+
+      <!-- 4. BRANCH A2 -->
+      <section class="kb-section" id="branch-a2">
+        <div class="section-number">04</div>
+        <span class="tag fallback" data-ar="المسار أ٢ · بديل">Branch A2 · Fallback</span>
+        <h2 class="section-title" data-ar="بديل تسجيل الحضور أو المشاركة">Check-in / Share Fallback</h2>
+        <p class="section-purpose" data-ar="يُستخدم عندما يكون ولي الأمر راضيًا لكن دون مثال جاهز للإحالة. الهدف هو الحصول على الأقل على تسجيل حضور أو مشاركة — فلا يجب أن تنتهي المكالمة دون أي نتيجة.">Use when the parent is satisfied but has no example on hand. The goal is to secure at least a check-in or share — a call is never a dead end.</p>
+        <div class="card">
+          <p class="script-line" data-ar="لا بأس تمامًا — إذا لم يخطر ببالك أحد الآن، هل توافقين على مساعدتنا بتسجيل حضور سريع أو مشاركة بسيطة عن تجربة فيصل بدلاً من ذلك؟ الأمر لا يستغرق أكثر من دقيقة ويساعد أولياء أمور آخرين على رؤية آراء حقيقية.">That's completely fine — if no one specific comes to mind right now, would you be willing to help us with a quick check-in or share about Faisal's experience instead? It takes less than a minute and helps other parents see genuine feedback.</p>
+        </div>
+        <div class="example">
+          <div class="example-header"><span class="ex-title" data-ar="مثال مكالمة — لا إحالة، تمت المشاركة">Example call — no referral, share secured</span><span class="tag fallback" data-ar="النتيجة: تمت المشاركة">Outcome: Share completed</span></div>
+          <div class="transcript">
+            <div class="bubble parent"><div class="avatar">U</div><div class="msg"><span class="who-name" data-ar="أم فيصل · ولية الأمر">Umm Faisal · Parent</span><span class="msg-text" data-ar="لا أحد يخطر ببالي الآن، آسفة.">No one comes to mind right now, sorry.</span></div></div>
+            <div class="bubble agent"><div class="avatar">R</div><div class="msg"><span class="who-name" data-ar="رانيا · الموظفة">Rania · Agent</span><span class="msg-text" data-ar="لا مشكلة إطلاقًا — هل تودين تسجيل حضور سريع أو مشاركة عن تجربة فيصل بدلاً من ذلك؟ لا يستغرق سوى دقيقة ويساعد أولياء أمور آخرين كثيرًا.">No problem at all — would you be open to a quick check-in or share about Faisal's experience instead? It only takes a minute and really helps other parents.</span></div></div>
+            <div class="bubble parent"><div class="avatar">U</div><div class="msg"><span class="who-name" data-ar="أم فيصل · ولية الأمر">Umm Faisal · Parent</span><span class="msg-text" data-ar="بالتأكيد، يمكنني ذلك.">Sure, I can do that.</span></div></div>
+            <div class="bubble agent"><div class="avatar">R</div><div class="msg"><span class="who-name" data-ar="رانيا · الموظفة">Rania · Agent</span><span class="msg-text" data-ar="شكرًا جزيلًا — سأرسل الرابط الآن. أقدّر وقتك كثيرًا اليوم.">Thank you so much — I'll send the link now. I really appreciate your time today.</span></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. BRANCH B -->
+      <section class="kb-section" id="branch-b">
+        <div class="section-number">05</div>
+        <span class="tag issue" data-ar="المسار ب · غير راضٍ">Branch B · Dissatisfied</span>
+        <h2 class="section-title" data-ar="نصوص حل المشكلات">Issue Resolution Scripts</h2>
+        <p class="section-purpose" data-ar="بمجرد ظهور عدم الرضا، أوقف مسار التقييم وانتقل فورًا إلى الحل. لا حديث عن الإحالة في هذا المسار — الحل أولًا، ويمكن العودة لاحتمال الإحالة في مكالمة لاحقة.">The moment dissatisfaction surfaces, stop the evaluation flow and move to resolution. No referral talk in this branch — resolve first, revisit referral potential on a future call.</p>
+
+        <div class="card">
+          <h3 data-ar="إقرار عام">General acknowledgment</h3>
+          <p class="script-line" data-ar="شكرًا لإخباري بذلك — أريد أن أتأكد من معالجة هذا الأمر بشكل صحيح. دعني أتحقق مما يمكنني فعله مباشرة، أو أتأكد من وصوله إلى الشخص المناسب.">Thank you for letting me know — I want to make sure we get this right for you. Let me look into this and see what I can do directly, or make sure it reaches the right person.</p>
+        </div>
+        <table class="faq">
+          <tr><th data-ar="نوع المشكلة">Issue type</th><th data-ar="النص">Script</th></tr>
+          <tr><td data-ar="إجازة طارئة">Occasional leave</td><td data-ar="يمكنني تسجيل إجازة طارئة لك الآن — هل يمكنك تأكيد التاريخ والسبب؟">I can process an occasional leave for you now — could you confirm the date(s) and the reason?</td></tr>
+          <tr><td data-ar="دروس تقوية">Tutoring / extra help</td><td data-ar="يمكنني ترتيب حصة تقوية لمساعدة طفلك — دعني أتحقق من المتاح وأحدد الموعد.">I can arrange a tutoring session to help with that — let me check what's available and get this scheduled.</td></tr>
+          <tr><td data-ar="تعديل الجدول">Schedule adjustment</td><td data-ar="يمكنني المساعدة في تعديل الجدول — ما هي الأوقات الأنسب لكم مستقبلًا؟">I can help adjust the schedule — what times would work better going forward?</td></tr>
+          <tr><td data-ar="تغيير المعلم">Teacher change</td><td data-ar="يمكنني تقديم طلب لمراجعة تعيين المعلم، وسأوضح ملاحظاتك لإيجاد توافق أفضل.">I can submit a request to review the teacher assignment and flag your feedback for a better fit.</td></tr>
+          <tr><td data-ar="تعويض">Compensation</td><td data-ar="بناءً على ما ذكرته، يحق لك حصة إضافية كبادرة لتصحيح الأمر.">Given what you've described, you qualify for one additional lesson as a gesture to make this right.</td></tr>
+        </table>
+
+        <div class="example">
+          <div class="example-header"><span class="ex-title" data-ar="مثال مكالمة — شكوى جدول، تم الحل أثناء المكالمة">Example call — schedule complaint, resolved on-call</span><span class="tag issue" data-ar="النتيجة: تم الحل، دون طلب إحالة">Outcome: Resolved, no referral requested</span></div>
+          <div class="transcript">
+            <div class="bubble parent"><div class="avatar">S</div><div class="msg"><span class="who-name" data-ar="أم سارة · ولية الأمر">Umm Sara · Parent</span><span class="msg-text" data-ar="بصراحة، موعد الحصة لم يناسبنا منذ أسابيع — سارة تفوّت نصف الحصص.">Honestly, the class time hasn't worked for us in weeks — Sara's been missing half of them.</span></div></div>
+            <div class="bubble agent"><div class="avatar">R</div><div class="msg"><span class="who-name" data-ar="رانيا · الموظفة">Rania · Agent</span><span class="msg-text" data-ar="شكرًا لإخباري — أريد حل هذا بشكل فعلي وليس فقط تدوينه. يمكنني تعديل الجدول الآن. ما الأوقات التي قد تناسبكم فعلًا؟">Thank you for telling me — I want to fix this properly rather than just note it. I can help adjust the schedule now. What times would actually work going forward?</span></div></div>
+            <div class="bubble parent"><div class="avatar">S</div><div class="msg"><span class="who-name" data-ar="أم سارة · ولية الأمر">Umm Sara · Parent</span><span class="msg-text" data-ar="المساء بعد الساعة السابعة سيكون أفضل بكثير.">Evenings after 7pm would be much better.</span></div></div>
+            <div class="bubble agent"><div class="avatar">R</div><div class="msg"><span class="who-name" data-ar="رانيا · الموظفة">Rania · Agent</span><span class="msg-text" data-ar="قمت بتحديث ذلك ضمن الخيارات المتاحة. لن نتحدث عن الإحالة اليوم — أولويتي التأكد من حل هذا الأمر لسارة أولًا.">I've updated that for you within the available options. We won't talk about referrals today — my priority is making sure this is actually fixed for Sara first.</span></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5.7 ESCALATION -->
+      <section class="kb-section" id="escalation">
+        <span class="tag issue" data-ar="٥.٧ · خارج نطاق الصلاحيات">5.7 · Outside permission scope</span>
+        <h2 class="section-title" data-ar="نص التصعيد">Escalation Script</h2>
+        <div class="card">
+          <p class="script-line" data-ar="هذا أمر أريد التأكد من حصوله على الاهتمام المناسب، لذا سأصعّده اليوم مباشرة إلى فريق CC / SS / خدمة العملاء. ستصلكم إجابة خلال أيام عمل قليلة، وسأتابع هذا الأمر شخصيًا حتى لا يُهمَل.">This is something I want to make sure gets the right attention, so I'm escalating it directly to our CC / SS / Customer Service team today. You'll hear back within a few business days, and I'll personally note this so it isn't lost.</p>
+        </div>
+        <p class="note"><b data-ar="القاعدة:">Rule:</b> <span data-ar="لا تَعِد أبدًا بنتيجة خارج الصلاحيات المذكورة في القسم السادس من وثيقة المشروع (أداة الاتصال الصادر، استعلام CRM، تسجيل الإحالة، الإجازة/التعويض، مساعدة تغيير الصف/المعلم، آلية التصعيد). صعّد بدلًا من التخمين.">never promise an outcome outside the permissions in Section VI of the project doc (outbound tool, CRM query, referral registration, leave/make-up, class/teacher assistance, escalation mechanism). Escalate rather than guess.</span></p>
+      </section>
+
+      <!-- 6. OBJECTIONS -->
+      <section class="kb-section" id="objections">
+        <div class="section-number">06</div>
+        <h2 class="section-title" data-ar="الاعتراضات والأسئلة الشائعة">Objections &amp; FAQ</h2>
+        <table class="faq">
+          <tr><th data-ar="الاعتراض">Objection</th><th data-ar="الرد">Response</th></tr>
+          <tr><td data-ar="لا يخطر ببالي أحد.">"I don't have anyone in mind."</td><td data-ar="لا بأس — هل يناسبك تسجيل حضور سريع أو مشاركة بدلًا من ذلك؟ دون أي ضغط.">That's fine — would a quick check-in or share work instead? No pressure either way.</td></tr>
+          <tr><td data-ar="سبق وأحلت شخصًا من قبل.">"I already referred someone before."</td><td data-ar="شكرًا لك — هل هناك شخص آخر خطر ببالك مؤخرًا، أم تودين أن أتحقق من حالة تلك الإحالة؟">Thank you — is there anyone else who's come up since, or would you like me to check that referral's status?</td></tr>
+          <tr><td data-ar="ما الفائدة التي سأحصل عليها؟">"What do I get out of it?"</td><td data-ar="الإحالات التي يحضر أصحابها ويشتركون تُكافأ وفق شروطنا الحالية — يمكنني تأكيد التفاصيل الدقيقة لحالتك.">Referrals that go on to attend and pay are rewarded under our current terms — I can confirm the exact details for your case.</td></tr>
+          <tr><td data-ar="لا أشعر بالراحة لمشاركة رقم صديقي.">"I'm not comfortable sharing their number."</td><td data-ar="أتفهم ذلك — يمكنك مشاركة معلومات التواصل معنا مباشرة بدلًا من ذلك.">Understood — you're welcome to share our contact with them directly instead.</td></tr>
+          <tr><td data-ar="هل هذه مكالمة بيع؟">"Is this a sales call?"</td><td data-ar="لا — هذه مكالمة تقييم خدمة للعائلات النشطة؛ الحديث عن الإحالة يأتي فقط إذا كنتِ راضية عن التجربة.">No — this is a service check for active families; referral only comes up if you're happy with the experience.</td></tr>
+          <tr><td data-ar="ليس لدي وقت الآن.">"I don't have time right now."</td><td data-ar="لا مشكلة — هل هناك وقت أنسب للاتصال بك مجددًا، أم أدوّن أن كل شيء يسير بشكل جيد؟">No problem — is there a better time to call back, or should I just note that everything's going well?</td></tr>
+        </table>
+      </section>
+
+      <!-- 7. CLOSING -->
+      <section class="kb-section" id="closing">
+        <div class="section-number">07</div>
+        <h2 class="section-title" data-ar="نصوص الختام">Closing Scripts</h2>
+        <div class="card">
+          <h3 data-ar="بعد مكالمة راضية / إحالة">After a satisfied / referral call</h3>
+          <p class="script-line" data-ar="شكرًا جزيلًا مرة أخرى على وقتك وملاحظاتك — فهي تساعدنا فعلًا. أتمنى لك يومًا جميلًا، ونحن دائمًا هنا إذا احتجت أي شيء.">Thank you again for your time and your feedback — it genuinely helps us. Have a great day, and we're always here if you need anything.</p>
+          <h3 data-ar="بعد مكالمة حل مشكلة">After an issue-resolution call</h3>
+          <p class="script-line" data-ar="شكرًا لصبرك — للتلخيص، قمت بإجراء التعديل اللازم وصعّدت الجزء المتبقي إلى الفريق المختص الذي سيتابع معكم قريبًا. هل هناك أي شيء آخر يمكنني المساعدة به اليوم؟">Thank you for your patience — to summarize, I've made the adjustment and escalated the remaining item to the right team, who'll follow up soon. Is there anything else I can help with today?</p>
+          <h3 data-ar="بريد صوتي / عدم الرد">Voicemail / no answer</h3>
+          <p class="script-line" data-ar="مرحبًا، معك رانيا من فريق تقييم الخدمة في 51Talk — كنت أتصل للاطمئنان على تجربة تعلّم طفلك. يرجى معاودة الاتصال بنا في الوقت المناسب، أو سنحاول مجددًا قريبًا.">Hello, this is Rania from 51Talk's Service Evaluation team — I was calling to check in on your child's learning experience. Please call back whenever convenient, or we'll try again shortly.</p>
+        </div>
+      </section>
+
+      <!-- 8. UX SURVEY -->
+      <section class="kb-section" id="ux-survey">
+        <div class="section-number">08</div>
+        <h2 class="section-title" data-ar="إضافات استبيان تجربة المستخدم">User Experience Survey Add-ons</h2>
+        <p class="section-purpose" data-ar="تُدرَج بعد تقييم الرضا القياسي عندما تكون المكالمة مصنّفة أيضًا ضمن مهام مشروع تجربة المستخدم.">Insert after the standard satisfaction assessment when a call is also tagged as a User Experience Project task.</p>
+        <table class="faq">
+          <tr><th data-ar="مهمة الاستبيان">Survey task</th><th data-ar="السؤال الإضافي">Add-on probe</th></tr>
+          <tr><td data-ar="متابعة المستخدمين ذوي الاستهلاك المرتفع">High-consumption revisit</td><td data-ar="بما أنك تحضرين الحصص بانتظام كبير، ما الذي كان يعمل بشكل جيد بشكل خاص؟">Since you've been taking classes so consistently, what's been working especially well?</td></tr>
+          <tr><td data-ar="دراسة أسباب انخفاض الحضور">Low-attendance study</td><td data-ar="لاحظنا انخفاضًا في الحضور مؤخرًا — هل هناك سبب محدد، كالجدول أو ضغط الدراسة؟">I noticed attendance has been lower recently — is there a specific reason, like scheduling or workload?</td></tr>
+          <tr><td data-ar="رضا المعلم الثابت">Fixed-teacher satisfaction</td><td data-ar="كيف تصفين تجربة الاحتفاظ بنفس المعلم على مدى فترة طويلة؟">How would you describe having the same teacher over time?</td></tr>
+          <tr><td data-ar="دراسة فهم الدفع أو التقسيط">Payment / installment study</td><td data-ar="هل كانت عملية الدفع واضحة عند التسجيل؟ هل واجهتِ أي التباس في أي خطوة؟">Was the payment process clear when you signed up? Any confusion at any step?</td></tr>
+          <tr><td data-ar="راضٍ لكنه لم يُحل">Satisfied-but-no-referral</td><td data-ar="ذكرتِ أن الأمور تسير جيدًا — هل هناك سبب لعدم قيامك بترشيح أحد حتى الآن؟">You mentioned things are going well — is there a reason you haven't referred anyone yet?</td></tr>
+        </table>
+      </section>
+
+      <!-- 9. LOGGING -->
+      <section class="kb-section" id="logging">
+        <div class="section-number">09</div>
+        <h2 class="section-title" data-ar="تسجيل بيانات المكالمة">Call Data Logging</h2>
+        <ul class="checklist">
+          <li data-ar="نتيجة المكالمة — تم الرد / لا رد / طلب معاودة الاتصال">Call outcome — connected / no answer / call back requested</li>
+          <li data-ar="مستوى الرضا المسجَّل">Satisfaction level captured</li>
+          <li data-ar="أبرز الملاحظات (سطر أو سطران، نص حر)">Main feedback (1–2 lines, free text)</li>
+          <li data-ar="هل تم تحديد مشكلة خدمة، ونوعها">Service issue identified, and type</li>
+          <li data-ar="هل تم حل المشكلة أثناء المكالمة، أم صُعِّدت، أم بقيت دون حل">Issue resolved on-call, escalated, or unresolved</li>
+          <li data-ar="هل تم تفعيل إحالة — الاسم ورقم التواصل إن وُجد">Referral triggered — name/contact if provided</li>
+          <li data-ar="هل تم تسجيل حضور أو مشاركة كبديل">Check-in / share completed as fallback</li>
+          <li data-ar="هل تلزم متابعة لاحقة، وممن">Follow-up required, and by whom</li>
+        </ul>
+      </section>
+
+      <!-- 10. QUICK REF -->
+      <section class="kb-section" id="quickref">
+        <div class="section-number">10</div>
+        <h2 class="section-title" data-ar="البطاقة المرجعية السريعة">Quick Reference Card</h2>
+        <div class="card">
+          <p style="margin:0 0 10px;"><b>1.</b> <span data-ar="ابدأ بتقييم الخدمة — لا تبدأ أبدًا بالإحالة.">Open with service evaluation — never lead with referral.</span></p>
+          <p style="margin:0 0 10px;"><b>2.</b> <span data-ar="قيّم الرضا عبر المحاور الخمسة.">Assess satisfaction across the 5 probe dimensions.</span></p>
+          <p style="margin:0 0 10px;"><b>3.</b> <span data-ar="إذا كان العميل راضيًا ← اطلب الإحالة، أو تسجيل حضور/مشاركة إن لم يوجد مثال.">Satisfied → referral ask, or check-in/share if no example.</span></p>
+          <p style="margin:0 0 10px;"><b>4.</b> <span data-ar="إذا كان العميل غير راضٍ ← حل المشكلة ضمن الصلاحيات، أو صعّدها.">Dissatisfied → resolve within permissions, or escalate.</span></p>
+          <p style="margin:0 0 10px;"><b>5.</b> <span data-ar="اختم بالنص المناسب، ثم سجّل بيانات المكالمة.">Close with the matching script, then log the call.</span></p>
+          <p style="margin:0; font-weight:700; color:var(--brand-dark);" data-ar="القاعدة الذهبية: عالج المشكلة قبل أن تطلب — ولا تنهِ مكالمة عميل راضٍ دون نتيجة.">Golden rule: resolve before you ask — and never end a satisfied call empty-handed.</p>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="kb-footer" data-ar="مسار تقييم الخدمة TMK · كتاب معرفة الإحالة · للاستخدام الداخلي فقط">TMK Service Evaluation Track · Referral Knowledge Book · Internal use only</footer>
+  </div>
+</div>
+
+<script>
+  // Cache original English text for every translatable node
+  const translatable = Array.from(document.querySelectorAll('[data-ar]'));
+  translatable.forEach(el => { if(!el.dataset.en) el.dataset.en = el.innerHTML; });
+
+  const searchInputEl = document.getElementById('kbSearch');
+  let currentLang = 'en';
+
+  function applyLang(lang){
+    currentLang = lang;
+    translatable.forEach(el => {
+      el.innerHTML = lang === 'ar' ? el.dataset.ar : el.dataset.en;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.body.classList.toggle('rtl', lang === 'ar');
+    // search placeholder
+    searchInputEl.placeholder = lang === 'ar' ? searchInputEl.dataset.phAr : 'Search scripts, examples, objections…';
+    // toggle button label shows the OTHER language
+    document.getElementById('langToggleLabel').textContent = lang === 'ar' ? 'English' : 'العربية';
+  }
+
+  document.getElementById('langToggle').addEventListener('click', () => {
+    applyLang(currentLang === 'ar' ? 'en' : 'ar');
+  });
+
+  // Scroll-spy for active nav link
+  const links = Array.from(document.querySelectorAll('.nav-link'));
+  const sections = links.map(l => document.querySelector(l.getAttribute('href')));
+  function onScroll(){
+    let idx = 0;
+    sections.forEach((s,i)=>{ if(s && s.getBoundingClientRect().top - 100 <= 0) idx = i; });
+    links.forEach(l=>l.classList.remove('active'));
+    links[idx] && links[idx].classList.add('active');
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+
+  // Simple search filter across sections (matches visible text in either language)
+  const allSections = Array.from(document.querySelectorAll('.kb-section'));
+  searchInputEl.addEventListener('input', (e)=>{
+    const q = e.target.value.trim().toLowerCase();
+    allSections.forEach(sec=>{
+      if(!q){ sec.classList.remove('hidden-by-search'); return; }
+      const text = sec.innerText.toLowerCase();
+      sec.classList.toggle('hidden-by-search', !text.includes(q));
+    });
+  });
+  document.addEventListener('keydown', (e)=>{
+    if((e.metaKey || e.ctrlKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); searchInputEl.focus(); }
+  });
+</script>
+</body>
+</html>
