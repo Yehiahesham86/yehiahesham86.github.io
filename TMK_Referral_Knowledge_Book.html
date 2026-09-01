@@ -1,4 +1,5 @@
-<!DOCTYPE html> <html lang="en">
+<!DOCTYPE html>
+ <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <title>TMK Service Evaluation — Knowledge Book</title>
@@ -89,7 +90,66 @@ body.rtl.rewards-table td:last-child{ text-align:center; direction:rtl;
 .fc-final{margin-top:0;}
 body.rtl.fc{direction:rtl;}
 @media(max-width:880px){.fc{min-width:0; width:100%;}.fc-branches{column-gap:18px;}.fc-subbranches{column-gap:8px;}.fc-no-spacer{height:236px;}}
-</style> </head>
+</style> <style>
+/* Updated TMK SOP flow */
+.updated-tmk-flow{width:100%;max-width:100%;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px 28px;margin:20px 0 28px;overflow:visible}
+.updated-tmk-flow .u-flow{width:100%;min-width:0;display:flex;flex-direction:column;align-items:center}
+.updated-tmk-flow .u-node{width:min(100%,240px);min-width:0;font-size:12.5px;font-weight:700;padding:10px 12px;border-radius:8px;white-space:normal;overflow-wrap:anywhere;border:1px solid var(--line);background:var(--paper);color:var(--ink);text-align:center}
+.updated-tmk-flow .u-start{background:var(--brand);color:#fff;border-color:var(--brand)}
+.updated-tmk-flow .u-sat{background:var(--satisfied-bg);border-color:var(--satisfied);color:var(--satisfied)}
+.updated-tmk-flow .u-no{background:var(--fallback-bg);border-color:var(--fallback);color:var(--fallback)}
+.updated-tmk-flow .u-issue{background:var(--issue-bg);border-color:var(--issue);color:var(--issue)}
+.updated-tmk-flow .u-arrow{font-size:18px;color:var(--ink-soft);padding:4px}
+.updated-tmk-flow .u-decision{width:112px;height:112px;border:2px solid var(--brand);background:#fff;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;margin:12px 0}
+.updated-tmk-flow .u-decision span{transform:rotate(-45deg);width:92px;text-align:center;font-size:11px;font-weight:700;color:var(--brand-dark);line-height:1.25}
+.updated-tmk-flow .u-branches{width:100%;min-width:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+.updated-tmk-flow .u-branch{min-width:0;display:flex;flex-direction:column;align-items:center;border:1px solid var(--line);border-radius:12px;padding:16px 12px;background:#fafbfa}
+.updated-tmk-flow .u-branch .u-branches{grid-template-columns:1fr;gap:12px}
+.updated-tmk-flow .u-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;margin-bottom:8px}
+.updated-tmk-flow .u-label.y{color:var(--satisfied)}
+.updated-tmk-flow .u-label.n{color:var(--fallback)}
+.updated-tmk-flow .u-label.i{color:var(--issue)}
+.updated-tmk-flow .u-recovery{width:100%;margin-top:24px;border-top:1px solid var(--line);padding-top:22px}
+.updated-tmk-flow .u-recovery .u-branches{margin-top:10px}
+@media(max-width:880px){.updated-tmk-flow{padding:20px 14px}.updated-tmk-flow .u-branches{grid-template-columns:1fr}.updated-tmk-flow .u-decision{width:96px;height:96px}.updated-tmk-flow .u-decision span{width:78px;font-size:10.5px}}
+.sop-core-rule{margin-top:22px;padding:18px 20px;border:1px solid #cfe2dc;border-left:5px solid var(--brand);border-radius:12px;background:linear-gradient(90deg,#e8f4f1,#f8fbfa);color:var(--brand-dark);line-height:1.7}
+body.rtl .sop-core-rule{border-left:1px solid #cfe2dc;border-right:5px solid var(--brand)}
+</style>
+<style>
+/* 2026 visual refresh */
+:root{
+  --ink:#14201d;--ink-soft:#53615d;--paper:#f5f7f6;--panel:#fff;
+  --line:#dfe6e3;--brand:#08766b;--brand-dark:#063f3a;--gold:#d29a32;
+  --shadow-sm:0 1px 2px rgba(8,45,40,.05),0 8px 24px rgba(8,45,40,.05);
+  --shadow-md:0 18px 48px rgba(8,45,40,.10);
+}
+body{background:linear-gradient(180deg,#f8faf9 0,#f2f5f3 100%);font-size:15px}
+.sidebar{width:292px;padding:30px 22px;background:linear-gradient(180deg,#063f3a 0%,#052f2c 100%);box-shadow:12px 0 36px rgba(3,42,38,.08);scrollbar-width:thin;scrollbar-color:#39726c transparent}
+.sidebar-brand{color:#8ed2c7;font-size:10px}.sidebar-title{font-size:24px;margin-bottom:28px}.nav-label{color:#79a9a2;margin-top:24px}.nav-link{padding:9px 12px;border-radius:9px;color:#d4e7e3;transition:.18s ease;border-left:3px solid transparent}.nav-link:hover{transform:translateX(2px);background:rgba(255,255,255,.08)}.nav-link.active{background:linear-gradient(90deg,rgba(210,154,50,.18),rgba(255,255,255,.06));border-left-color:var(--gold)}
+.topbar{padding:16px 40px;background:rgba(248,250,249,.86);backdrop-filter:blur(16px);box-shadow:0 1px 0 rgba(8,45,40,.06)}
+.search-wrap{max-width:520px;border-radius:12px;padding:10px 13px;box-shadow:0 4px 18px rgba(8,45,40,.04);transition:.2s ease}.search-wrap:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px rgba(8,118,107,.10)}
+.lang-toggle{border-radius:10px;padding:9px 15px;transition:.2s ease}.lang-toggle:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(8,118,107,.18)}
+.content{max-width:980px;padding:62px 54px 130px}.hero{margin-bottom:72px;padding:42px;border-radius:24px;background:radial-gradient(circle at 90% 10%,rgba(210,154,50,.14),transparent 32%),linear-gradient(135deg,#fff 0%,#eef8f5 100%);border:1px solid #dce9e5;box-shadow:var(--shadow-md)}
+.eyebrow{display:inline-flex;padding:6px 10px;border-radius:999px;background:#e1f1ed;color:var(--brand-dark);font-weight:700}h1.book-title{font-size:48px;letter-spacing:-.035em;margin-top:14px}.hero p.lead{font-size:17px;line-height:1.75}
+.flowmap{border:0;border-radius:18px;background:rgba(255,255,255,.78);box-shadow:inset 0 0 0 1px var(--line)}
+section.kb-section{margin-bottom:80px;scroll-margin-top:105px}h2.section-title{font-size:31px;letter-spacing:-.02em;margin-bottom:12px}.section-purpose{font-size:15.5px;line-height:1.75}.section-number{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:28px;padding:0 9px;border-radius:8px;background:#e2f1ee;color:var(--brand-dark);font-weight:700}
+.card,.role-card,.stat,.example{border-color:var(--line);box-shadow:var(--shadow-sm);transition:transform .2s ease,box-shadow .2s ease}.card{border-radius:16px;padding:26px 28px;margin-bottom:22px}.card:hover,.role-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(8,45,40,.08)}.card h3{font-size:15.5px;color:var(--brand-dark)}
+.tag{border-radius:999px;padding:5px 10px}.script-line{font-size:17px;line-height:1.75;padding:14px 18px;margin:6px 0 18px;background:linear-gradient(90deg,#edf7f4,transparent);border-radius:0 12px 12px 0}.note{border:1px solid #dbe6e2;padding:13px 16px;border-radius:11px}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.stat{min-width:0;border-radius:16px;padding:20px 22px}.stat .num{font-size:36px}.stat .lbl{font-size:12px}
+.role-card{border-radius:16px;padding:22px 24px;align-items:flex-start}.role-num{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#fff4df;font-size:22px}
+.example{border-radius:16px;overflow:hidden;padding-bottom:24px}.example-header{background:#f6f9f8;padding:16px 22px}.bubble{padding:2px 0}.bubble .msg{padding:11px 14px;border-radius:12px;background:#f4f7f6}.bubble.agent .msg{background:#e8f4f1}.bubble .avatar{width:32px;height:32px;box-shadow:0 4px 12px rgba(8,45,40,.14)}
+table.faq{border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);background:#fff}table.faq th{padding:12px 15px;background:#07544d}table.faq td{padding:13px 15px}table.faq tr:last-child td{border-bottom:0}
+.checklist{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 22px;box-shadow:var(--shadow-sm)}.checklist li{padding:12px 2px}.checklist li::before{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:7px;background:#e1f2ed;font-size:12px;font-weight:800}
+.pathline{border:1px solid #d7e8e3;border-radius:14px}.tmk-video-wrap,.gifts-reference-image{border-radius:16px;box-shadow:var(--shadow-md)}footer.kb-footer{max-width:980px}
+.mobile-menu{display:none;border:1px solid var(--line);background:#fff;color:var(--brand-dark);border-radius:10px;width:42px;height:42px;font-size:20px;cursor:pointer}
+body.rtl .nav-link:hover{transform:translateX(-2px)}body.rtl .script-line{border-radius:12px 0 0 12px;background:linear-gradient(-90deg,#edf7f4,transparent)}
+@media(max-width:880px){
+ .mobile-menu{display:inline-flex;align-items:center;justify-content:center}.sidebar{display:block;position:fixed;z-index:20;inset:0 auto 0 0;transform:translateX(-105%);transition:transform .25s ease;height:100vh}.sidebar.open{transform:translateX(0)}body.rtl .sidebar{inset:0 0 0 auto;transform:translateX(105%)}body.rtl .sidebar.open{transform:translateX(0)}
+ .content{padding:36px 20px 90px}.topbar{padding:11px 16px;gap:10px}.topbar-meta,.kbd{display:none}.hero{padding:28px 22px;border-radius:18px}h1.book-title{font-size:37px}.flowmap{padding:20px 14px}h2.section-title{font-size:27px}
+}
+@media(max-width:560px){.search-wrap{padding:9px 10px}.lang-toggle{padding:9px 10px}.hero{margin-bottom:54px}h1.book-title{font-size:33px}.card{padding:21px 19px}.example-header{align-items:flex-start;gap:10px;flex-direction:column}.transcript{padding:15px 15px 0}table.faq{display:block;overflow-x:auto}.stat-row{grid-template-columns:1fr 1fr}}
+@media print{.sidebar,.topbar,.mobile-menu{display:none!important}.content{max-width:none;padding:20px}.hero{box-shadow:none}.card,.example,.role-card,table.faq{break-inside:avoid;box-shadow:none}body{background:#fff}}
+</style></head>
 <body>
 <div class="shell">
 <!-- SIDEBAR -->
@@ -112,10 +172,8 @@ body.rtl.fc{direction:rtl;}
 <div class="nav-group">
 <a class="nav-link" data-ar="٠. هل تم الرد؟" href="#call-answer">0. Call Answer Decision</a>
 <a class="nav-link" data-ar="مرجع وأمثلة الريفيرال من CM" href="#cm-referral-reference">CM Referral Reference &amp; Examples</a>
-<a class="nav-link" data-ar="مثال فيديو على طريقة التواصل" href="#tmk-video-example">TMK Communication Video</a>
 <a class="nav-link" data-ar="مرجع الهدايا والمكافآت" href="#gifts-reference">Gifts &amp; Rewards Reference</a> <a class="nav-link" data-ar="١. الافتتاحية وتقييم الخدمة" href="#opening">1. Opening &amp; Evaluation</a>
 <a class="nav-link" data-ar="الانتقال من التقييم إلى الريفيرال" href="#referral-bridge">Survey → Referral Bridge</a>
-
 <a class="nav-link" data-ar="٢. أسئلة قياس الرضا" href="#assessment">2. Satisfaction Probes</a>
 </div>
 <div class="nav-label" data-ar="المسار أ — العميل راضٍ">Branch A — Satisfied</div>
@@ -140,13 +198,14 @@ body.rtl.fc{direction:rtl;}
 <!-- MAIN -->
 <div class="main">
 <div class="topbar">
+<button class="mobile-menu" id="mobileMenu" type="button" aria-label="Open navigation">☰</button>
 <div class="search-wrap">
 <span>⌕</span>
 <input data-ph-ar="ابحث في النصوص ونماذج المكالمات والاعتراضات…" id="kbSearch" placeholder="Search scripts, call samples, objections…" type="text"/>
 <span class="kbd">⌘K</span>
 </div>
-<button id="langToggle" onclick="toggleLang()" class="lang-toggle" type="button">
-<span>العربية</span>
+<button class="lang-toggle" id="langToggle" type="button">
+<span id="langToggleLabel">العربية</span>
 </button>
 <div class="topbar-meta" data-ar="المرحلة ١ · نموذج أولي">Phase 1 · MVP</div>
 </div>
@@ -155,10 +214,6 @@ body.rtl.fc{direction:rtl;}
 <div class="eyebrow" data-ar="مشروع الريفيرال في الشرق الأوسط — تقييم الخدمة">Middle East Referral Project — Service Evaluation</div>
 <h1 class="book-title" data-ar="كل مكالمة تبعد عنك صفحة واحدة فقط.">Every call, one page away.</h1>
 <p class="lead" data-ar="هذه مكتبة النصوص العملية لفريق تقييم الخدمة TMK — نفس النصوص، مرتّبة وفق منطق التفرّع الذي تسير عليه كل مكالمة فعليًا، مع نموذج مكالمة تطبيقي أسفل كل نص.">This is the working script library for the TMK Service Evaluation team — the same scripts, translated into the branching logic every call actually follows, with a worked call sample under each one.</p>
-<div class="flowmap flowchart">
-<div class="flowmap-title" data-ar="كيف تسير المكالمة">How a call moves</div>
-<div class="fc"> <div class="fc-node fc-start" data-ar="بدء المكالمة">Start Call</div> <div class="fc-line fc-down"></div> <div class="fc-decision"> <div class="fc-diamond" style="position: relative; top: 40px;"><span data-ar="هل تم الرد؟">Call Answered?</span></div> </div> <div class="fc-branches" style="position: relative; top: 80px;"> <div class="fc-branch fc-yes"> <div class="fc-label" data-ar="نعم">YES</div> <div class="fc-line fc-down"></div> <div class="fc-node fc-start" data-ar="الافتتاحية">Opening Call</div> <div class="fc-line fc-down"></div> <div class="fc-node" data-ar="فحص الرضا">Satisfaction Check</div> <div class="fc-line fc-down"></div> <div class="fc-decision small"> <div class="fc-diamond" style="position: relative; top: 25px;"><span data-ar="مستوى الرضا؟">Satisfied?</span></div> </div> <div class="fc-subbranches" style="position: relative; top: 40px;"> <div class="fc-subbranch"> <div class="fc-label satisfied-label" data-ar="راضٍ">YES · SATISFIED</div> <div class="fc-line fc-down"></div> <div class="fc-node satisfied" data-ar="طلب الريفيرال">Referral Ask</div> <div class="fc-line fc-down"></div> <div class="fc-node fallback" data-ar="أو تسجيل حضور / مشاركة">Check-in / Share if no referral</div> </div> <div class="fc-subbranch"> <div class="fc-label issue-label" data-ar="غير راضٍ">NO · DISSATISFIED</div> <div class="fc-line fc-down"></div> <div class="fc-node issue" data-ar="الحل ضمن الصلاحيات">Resolve Issue</div> <div class="fc-line fc-down"></div> <div class="fc-node issue" data-ar="أو التصعيد">Escalate if needed</div> </div> </div> <div class="fc-merge-space"></div> </div> <div class="fc-branch fc-no"> <div class="fc-label" data-ar="لا">NO</div> <div class="fc-line fc-down"></div> <div class="fc-node fallback" data-ar="إرسال واتساب لحجز وقت مناسب">Send WhatsApp Time-Booking Message</div> <div class="fc-no-spacer"></div> </div> </div> <div class="fc-final-wrap" style="position: relative; top: 100px; right: 180px;"> <div class="fc-final-line"></div> <div class="fc-node fc-final" data-ar="التسجيل والختام">Log &amp; Close</div> </div>
-</div>
 </div>
 <section class="kb-section" id="welcome">
 <span class="tag neutral" data-ar="التدريب · مرحبًا بكم">Training · Welcome</span>
@@ -222,7 +277,18 @@ A referral is not the objective of the call—it is the natural outcome of an ex
 <p class="section-purpose" data-ar="هذا ليس تجربة جديدة تبدأ من الصفر — بل نموذج مُثبت الفعالية. العمل الحقيقي هو إصلاح ما حوله: التأهيل، نظام تقييم الأداء، صلاحيات الوصول للخدمة، والإجراءات الموحدة.">This isn't a new experiment starting from zero — it's a proven model. The real work is fixing the surrounding pieces: onboarding, performance appraisal, service-access permissions, and standardized process.</p>
 <p class="section-purpose" data-ar="لذلك جوهر هذا المشروع ليس 'إضافة فريق يطلب الريفيرالات'. بل بناء فريق تقييم خدمة مخصص للمستخدمين المدفوعين — فريق يحدد الرضا، ويحل المشكلات الحقيقية، ويترك الريفيرالات عالية الجودة تحدث كنتيجة طبيعية." style="margin-bottom:0;">So the core of this project isn't "add a team that asks for referrals." It's building a service-evaluation team dedicated to paying users — one that identifies satisfaction, resolves real issues, and lets high-quality referrals happen as a natural result.</p>
 </section>
-<!-- GOAL --> <!-- ROLE -->
+<!-- GOAL -->
+<section class="kb-section" id="goal">
+<div class="section-number">★</div>
+<h2 class="section-title" data-ar="هدف المشروع">The Project Goal</h2>
+<p class="section-purpose" data-ar="الهدف هو بناء مسار خدمة متكامل يحوّل تقييم تجربة العميل إلى حل فعلي للمشكلات، ثم إلى ريفيرالات عالية الجودة فقط بعد تأكيد رضا العميل.">The goal is to build a complete service workflow that turns customer-experience evaluation into real issue resolution, followed by high-quality referrals only after customer satisfaction is confirmed.</p>
+<div class="insight-grid">
+<div class="card insight-card"><div class="insight-icon">01</div><h3 data-ar="تحسين تجربة العميل">Improve Customer Experience</h3><p data-ar="اكتشاف المشكلات مبكرًا، وحلها ضمن الصلاحيات، وتصعيد الحالات التي تحتاج إلى دعم إضافي.">Identify issues early, resolve them within available permissions, and escalate cases that require additional support.</p></div>
+<div class="card insight-card"><div class="insight-icon">02</div><h3 data-ar="توليد ريفيرالات عالية الجودة">Generate Quality Referrals</h3><p data-ar="طلب الريفيرال من العملاء الراضين بطريقة طبيعية ومنخفضة الضغط، مع التركيز على الحضور والتحويل.">Ask satisfied customers for referrals naturally and without pressure, focusing on attendance and conversion quality.</p></div>
+<div class="card insight-card"><div class="insight-icon">03</div><h3 data-ar="بناء حلقة متابعة مغلقة">Build a Closed Follow-up Loop</h3><p data-ar="توثيق كل تفاعل ومتابعة الحل والرضا والريفيرال حتى اكتمال الإجراء أو تحديد المسؤول التالي.">Document every interaction and follow resolution, satisfaction, and referral outcomes until completion or clear reassignment.</p></div>
+</div>
+</section>
+<!-- ROLE -->
 <section class="kb-section" id="role">
 <div class="section-number">★</div>
 <h2 class="section-title" data-ar="دورك — خمس مسؤوليات">Your Role — Five Responsibilities</h2>
@@ -256,22 +322,99 @@ A referral is not the objective of the call—it is the natural outcome of an ex
 <p data-ar="إذا كان المستخدم راضيًا لكنه لا يستطيع تسمية ريفيرال الآن، وجّهه على الأقل إلى تسجيل حضور واحد أو مشاركة. هذا يحافظ على تفاعله، ويضيف انتشارًا طبيعيًا، ويخلق فرص ريفيرال مستقبلية، ويزيل ضغط الحاجة إلى ريفيرال في كل مكالمة.">If a user is satisfied but can't name a referral right now, guide them to at least one check-in or share. It keeps them engaged, adds natural exposure, creates future referral opportunities, and removes the pressure of needing a referral on every single call.</p>
 </div>
 </div>
+<div class="role-card">
+<div class="role-num">5</div>
+<div class="role-body">
+<h3 data-ar="التسجيل والمتابعة">Accurate Logging &amp; Follow-up</h3>
+<p data-ar="سجّل نتيجة كل مكالمة، ومستوى الرضا، ونوع المشكلة، وحالة الحل أو التصعيد، ونتيجة الريفيرال، والخطوة التالية. تابع الحالات المفتوحة حتى يتم إغلاقها أو تعيينها بوضوح للجهة المسؤولة.">Record every call outcome, satisfaction level, issue type, resolution or escalation status, referral result, and next action. Follow open cases until they are closed or clearly assigned to the responsible owner.</p>
+</div>
+</div>
 </section>
 <!-- SOP -->
 <section class="kb-section" id="sop">
 <div class="section-number">★</div>
 <h2 class="section-title" data-ar="الإجراء التشغيلي القياسي (SOP) الكامل">The Full Standard Operating Procedure</h2>
-<p class="section-purpose" data-ar="هذا هو التسلسل الدقيق الذي تمر به كل حالة من البداية إلى النهاية. كل نص في هذا الكتاب يرتبط بإحدى هذه الخطوات.">This is the exact sequence every case follows, end to end. Each script in this book maps to one of these steps.</p>
-<ol class="sop-list">
-<li data-ar="إدخال قائمة أسماء المستخدمين إلى النظام.">User list is entered into the system.</li>
-<li data-ar="يتحقق فريق TMK من حالة المستخدم وسياق خدمته.">TMK checks the user's status and service context.</li>
-<li data-ar="إجراء الاتصال الأول وتحديد ما إذا تم الرد. إذا تم الرد ← الانتقال إلى الافتتاحية. إذا لم يتم الرد ← إرسال واتساب لحجز وقت مناسب لإعادة الاتصال.">Make the first call and determine whether it is answered. If answered → continue to Opening. If not answered → send a WhatsApp time-booking message for a callback.</li>
-<li data-ar='بعد الرد على المكالمة، الانتقال إلى الافتتاحية وتقييم الخدمة. &lt;span class="sop-ref"&gt;→ §1&lt;/span&gt;'>After the call is answered, move to Opening &amp; Service Evaluation. <span class="sop-ref">→ §1</span></li>
-<li data-ar='تقييم رضا المستخدم. &lt;span class="sop-ref"&gt;→ §2&lt;/span&gt;'>Assess user satisfaction. <span class="sop-ref">→ §2</span></li>
-<li data-ar='المستخدمون الراضون ← تفعيل مسار الإحالة. &lt;span class="sop-ref"&gt;→ §3&lt;/span&gt;'>Satisfied users → trigger the referral flow. <span class="sop-ref">→ §3</span></li>
-<li data-ar='المستخدمون الراضون غير الراغبين في تقديم إحالة ← يُحتسبون تلقائيًا كتسجيل حضور أو مشاركة. &lt;span class="sop-ref"&gt;→ §4&lt;/span&gt;'>Satisfied users unwilling to give a referral → automatically counted as a check-in or share. <span class="sop-ref">→ §4</span></li>
-<li data-ar='المستخدمون غير الراضين ← يُوجَّهون إلى مسار حل المشكلات. &lt;span class="sop-ref"&gt;→ §5&lt;/span&gt;'>Dissatisfied users → routed to the issue-resolution process. <span class="sop-ref">→ §5</span></li>
-<li data-ar="تصعيد المشكلات إلى القسم المختص.">Escalate issues to the relevant department.</li> </ol>
+<p class="section-purpose" data-ar="هذا هو التسلسل الدقيق الذي تمر به كل حالة من البداية إلى النهاية. كل نص في هذا الكتاب يرتبط بإحدى هذه الخطوات.">This is the exact sequence every case follows, end to end. Each script in this book maps to one of these steps.</p><div class="updated-tmk-flow" id="updated-flow">
+<div class="flowmap-title" data-ar="مسار التشغيل المحدّث لفريق TMK">Updated TMK Operational Flow</div>
+<div class="u-flow">
+<div class="u-node u-start" data-ar="١. قائمة العملاء وسياق الخدمة">1. Customer List &amp; Service Context</div>
+<div class="u-arrow">↓</div>
+<div class="u-node" data-ar="٢. إجراء المكالمة">2. Make Call</div>
+<div class="u-arrow">↓</div>
+<div class="u-decision"><span data-ar="هل تم الرد على المكالمة؟">Was the call answered?</span></div>
+<div class="u-branches">
+<div class="u-branch">
+<div class="u-label y" data-ar="نعم — تم الرد">YES — ANSWERED</div>
+<div class="u-node u-start" data-ar="٣. الافتتاحية">3. Opening</div>
+<div class="u-arrow">↓</div>
+<div class="u-node" data-ar="٤. تقييم الخدمة">4. Service Evaluation</div>
+<div class="u-arrow">↓</div>
+<div class="u-node" data-ar="٥. تقييم الرضا">5. Satisfaction Assessment</div>
+<div class="u-arrow">↓</div>
+<div class="u-decision"><span data-ar="هل العميل راضٍ؟">Customer satisfied?</span></div>
+<div class="u-branches">
+<div class="u-branch">
+<div class="u-label y">YES</div>
+<div class="u-node u-sat" data-ar="مكالمة متابعة الريفيرال">Referral Follow-up Call</div>
+<div class="u-arrow">↓</div>
+<div class="u-node u-sat" data-ar="طلب الريفيرال">Ask for Referral</div>
+</div>
+<div class="u-branch">
+<div class="u-label i" data-ar="لا — العميل غير راضٍ">NO — DISSATISFIED</div>
+<div class="u-node u-issue" data-ar="٦. تحديد المشكلة">6. Identify Issue</div>
+<div class="u-arrow">↓</div>
+<div class="u-node u-issue" data-ar="٧. الحل ضمن الصلاحيات">7. Resolve Within Permissions</div>
+<div class="u-arrow">↓</div>
+<div class="u-node u-issue" data-ar="٨. التصعيد عند الحاجة">8. Escalate if Required</div>
+<div class="u-arrow">↓</div>
+<div class="u-node" data-ar="٩. المتابعة بعد الحل">9. Follow Up After Resolution</div>
+<div class="u-arrow">↓</div>
+<div class="u-decision"><span data-ar="هل تم تأكيد الرضا؟">Satisfaction confirmed?</span></div>
+<div class="u-branches">
+<div class="u-branch"><div class="u-label y" data-ar="نعم">YES</div><div class="u-node u-sat" data-ar="١٠. مكالمة متابعة الريفيرال">10. Referral Follow-up Call</div><div class="u-arrow">↓</div><div class="u-node u-sat" data-ar="١١. طلب الريفيرال">11. Ask for Referral</div></div>
+<div class="u-branch"><div class="u-label i" data-ar="لا">NO</div><div class="u-node u-issue" data-ar="استمرار الحل أو التصعيد">Continue Resolution / Escalation</div><div class="u-arrow">↓</div><div class="u-node u-issue" data-ar="المتابعة مرة أخرى">Follow Up Again</div></div>
+</div>
+</div>
+</div>
+<div class="u-arrow">↓</div>
+<div class="u-node u-no" data-ar="إذا لم توجد ريفيرال ← تسجيل حضور أو مشاركة">If No Referral → Check-in / Share Fallback</div>
+<div class="u-arrow">↓</div>
+<div class="u-node" data-ar="١٢. التسجيل والختام">12. Log &amp; Close</div>
+</div>
+<div class="u-branch">
+<div class="u-label n" data-ar="لا — لم يتم الرد">NO — NOT ANSWERED</div>
+<div class="u-node u-no" data-ar="إرسال رسالة واتساب لحجز موعد">Send WhatsApp Time-Booking Message</div>
+<div class="u-arrow">↓</div>
+<div class="u-node u-no" data-ar="تحديد موعد مناسب لمعاودة الاتصال">Arrange Suitable Callback Time</div>
+<div class="u-arrow">↓</div>
+<div class="u-node" data-ar="معاودة الاتصال ← المتابعة من الافتتاحية">Callback → Continue from Opening</div>
+</div>
+</div>
+</div>
+</div><ol class="sop-list">
+<li>User list is entered into the system and TMK checks the user's status and service context.</li>
+<li>Make the first call and determine whether it is answered.</li>
+<li>If the call is not answered, do not start the service-evaluation flow. Send the approved WhatsApp time-booking message and arrange a suitable callback.</li>
+<li>If the call is answered, continue with the existing Opening &amp; Service Evaluation process.</li>
+<li>Assess the customer's satisfaction before discussing referrals.</li>
+<li>If the customer is satisfied, arrange/perform the referral follow-up call and ask for a referral naturally and without pressure.</li>
+<li>If the customer is dissatisfied, identify the issue and attempt to resolve it within TMK permissions.</li>
+<li>If the issue cannot be resolved within TMK authority, escalate it to the relevant department or owner.</li>
+<li>After the issue is resolved, follow up with the customer to confirm that the solution worked and that the customer is satisfied.</li>
+<li>If satisfaction is confirmed, make the referral follow-up call and ask for a referral.</li>
+<li>If the customer is still dissatisfied, continue the resolution/escalation process and follow up again until the required action is completed.</li>
+<li>If there is no referral, use the approved check-in/share fallback where applicable rather than pressuring the customer.</li>
+<li>Log every interaction accurately, including call outcome, satisfaction, issue, resolution/escalation, post-resolution follow-up, referral result, and next action.</li>
+<li>Close the case only when all required actions are completed or the remaining follow-up is clearly documented and assigned.</li>
+</ol>
+<div class="sop-core-rule">
+<b data-ar="القاعدة الأساسية:">Core rule:</b>
+<span data-ar="تقييم الخدمة ← حل المشكلة عند الحاجة ← تأكيد الرضا ← متابعة الريفيرال ← ريفيرال أو تسجيل حضور أو مشاركة ← التسجيل والمتابعة."> Service evaluation → Issue resolution when needed → Satisfaction confirmation → Referral follow-up → Referral / check-in / share → Logging &amp; follow-up.</span>
+<br><br>
+<b data-ar="يجب ألا يحل طلب الريفيرال محل معالجة الخدمة.">Referral must never replace service recovery.</b>
+<span data-ar=" يجب مساعدة العميل غير الراضي أولًا. بعد حل المشكلة، يجب تأكيد رضاه قبل طلب الريفيرال."> A dissatisfied customer should be helped first. After the issue is resolved, satisfaction must be confirmed before the referral request.</span>
+</div>
+
 </section>
 <!-- METRICS -->
 <section class="kb-section" id="metrics">
@@ -788,6 +931,17 @@ function toggleLang() {
 
   const btn = document.getElementById('langToggle');
   if (btn) btn.textContent = arabic ? 'English' : 'العربية';
+}
+</script>
+<script>
+const mobileMenu = document.getElementById('mobileMenu');
+const sidebarEl = document.getElementById('sidebar');
+if (mobileMenu && sidebarEl) {
+  mobileMenu.addEventListener('click', () => sidebarEl.classList.toggle('open'));
+  document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', () => sidebarEl.classList.remove('open')));
+  document.addEventListener('click', event => {
+    if (window.innerWidth <= 880 && sidebarEl.classList.contains('open') && !sidebarEl.contains(event.target) && !mobileMenu.contains(event.target)) sidebarEl.classList.remove('open');
+  });
 }
 </script>
 </body>
